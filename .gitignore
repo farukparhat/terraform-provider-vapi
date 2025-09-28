@@ -52,3 +52,11 @@ Thumbs.db
 
 # Test artifacts
 testing/
+
+# GPG keys (never commit these!)
+*.asc
+private-key.*
+public-key.*
+
+# GoReleaser artifacts
+dist/
