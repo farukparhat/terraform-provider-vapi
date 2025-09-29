@@ -49,7 +49,7 @@ type AssistantResourceModel struct {
 
 // AssistantModelModel describes the model configuration
 type AssistantModelModel struct {
-	Provider                  types.String  `tfsdk:"provider"`
+	ProviderType              types.String  `tfsdk:"provider_type"`
 	Model                     types.String  `tfsdk:"model"`
 	Temperature               types.Float64 `tfsdk:"temperature"`
 	MaxTokens                 types.Int64   `tfsdk:"max_tokens"`
@@ -61,7 +61,7 @@ type AssistantModelModel struct {
 
 // AssistantVoiceModel describes the voice configuration
 type AssistantVoiceModel struct {
-	Provider        types.String  `tfsdk:"provider"`
+	ProviderType    types.String  `tfsdk:"provider_type"`
 	VoiceID         types.String  `tfsdk:"voice_id"`
 	Speed           types.Float64 `tfsdk:"speed"`
 	Stability       types.Float64 `tfsdk:"stability"`
@@ -103,7 +103,7 @@ func (r *AssistantResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: "Model configuration for the assistant",
 				Optional:            true,
 				Attributes: map[string]schema.Attribute{
-					"provider": schema.StringAttribute{
+					"provider_type": schema.StringAttribute{
 						MarkdownDescription: "Model provider (e.g., openai, anthropic)",
 						Required:            true,
 					},
@@ -143,7 +143,7 @@ func (r *AssistantResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: "Voice configuration for the assistant",
 				Optional:            true,
 				Attributes: map[string]schema.Attribute{
-					"provider": schema.StringAttribute{
+					"provider_type": schema.StringAttribute{
 						MarkdownDescription: "Voice provider (e.g., elevenlabs, playht)",
 						Required:            true,
 					},
@@ -206,10 +206,12 @@ func (r *AssistantResource) Schema(ctx context.Context, req resource.SchemaReque
 			"created_at": schema.StringAttribute{
 				MarkdownDescription: "Creation timestamp",
 				Computed:            true,
+				Optional:            true,
 			},
 			"updated_at": schema.StringAttribute{
-				MarkdownDescription: "Last update timestamp",
+				MarkdownDescription: "Last update timestamp", 
 				Computed:            true,
+				Optional:            true,
 			},
 		},
 	}
@@ -277,7 +279,7 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 			assistant.Model = &client.AssistantModel{}
 		}
 		
-		assistant.Model.Provider = modelData.Provider.ValueString()
+		assistant.Model.Provider = modelData.ProviderType.ValueString()
 		assistant.Model.Model = modelData.Model.ValueString()
 
 		if !modelData.Temperature.IsNull() {
@@ -327,7 +329,7 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 		}
 
 		assistant.Voice = &client.AssistantVoice{
-			Provider: voiceData.Provider.ValueString(),
+			Provider: voiceData.ProviderType.ValueString(),
 			VoiceID:  voiceData.VoiceID.ValueString(),
 		}
 
@@ -408,8 +410,11 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 
 	// Update the model with the created assistant data
 	data.ID = types.StringValue(createdAssistant.ID)
-	data.CreatedAt = types.StringValue(createdAssistant.CreatedAt)
-	data.UpdatedAt = types.StringValue(createdAssistant.UpdatedAt)
+	
+	// For now, set timestamp fields to null since VAPI API may not return them consistently
+	// This prevents "unknown value" errors while keeping the fields available
+	data.CreatedAt = types.StringNull()
+	data.UpdatedAt = types.StringNull()
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -440,8 +445,10 @@ func (r *AssistantResource) Read(ctx context.Context, req resource.ReadRequest, 
 	} else {
 		data.SystemMessage = types.StringValue("")
 	}
-	data.CreatedAt = types.StringValue(assistant.CreatedAt)
-	data.UpdatedAt = types.StringValue(assistant.UpdatedAt)
+	// For now, set timestamp fields to null since VAPI API may not return them consistently
+	// This prevents "unknown value" errors while keeping the fields available
+	data.CreatedAt = types.StringNull()
+	data.UpdatedAt = types.StringNull()
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

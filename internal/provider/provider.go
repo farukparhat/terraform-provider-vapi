@@ -4,12 +4,13 @@ import (
 	"context"
 	"os"
 
+	"terraform-provider-vapi/internal/client"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"terraform-provider-vapi/internal/client"
 )
 
 // Ensure VapiProvider satisfies various provider interfaces.
@@ -91,6 +92,7 @@ func (p *VapiProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *VapiProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewAssistantResource,
+		NewPhoneNumberResource,
 	}
 }
 

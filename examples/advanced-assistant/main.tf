@@ -27,7 +27,7 @@ EOF
 
   # Model configuration
   model = {
-    provider                    = "openai"
+    provider_type               = "openai"
     model                       = "gpt-4"
     temperature                 = 0.7
     max_tokens                  = 1000
@@ -37,7 +37,7 @@ EOF
 
   # Voice configuration
   voice = {
-    provider          = "elevenlabs"
+    provider_type     = "elevenlabs"
     voice_id          = "21m00Tcm4TlvDq8ikWAM" # Example voice ID
     speed             = 1.0
     stability         = 0.75

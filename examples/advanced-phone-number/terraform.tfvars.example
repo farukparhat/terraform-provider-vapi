@@ -1,0 +1,11 @@
+# Copy this file to terraform.tfvars and fill in your actual values
+
+# Twilio configuration (if using Twilio provider)
+twilio_account_sid = "your_twilio_account_sid_here"
+twilio_auth_token  = "your_twilio_auth_token_here"
+
+# Webhook configuration
+webhook_secret = "your_webhook_secret_here"
+
+# Phone number configuration
+phone_number = "+1234567890"  # Replace with your actual phone number in E.164 format

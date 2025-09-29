@@ -12,9 +12,11 @@ The Vapi provider enables you to manage [Vapi.ai](https://vapi.ai) resources usi
 ## Features
 
 - **Assistant Management**: Create, read, update, and delete Vapi assistants
+- **Phone Number Management**: Create, read, update, and delete Vapi phone numbers
 - **Full Configuration Support**: Configure models, voices, timeouts, and behavior settings
+- **Telephony Provider Support**: Integration with Twilio and Vonage for phone number management
 - **Environment Variable Support**: Use environment variables for sensitive configuration
-- **Import Support**: Import existing assistants into Terraform state
+- **Import Support**: Import existing assistants and phone numbers into Terraform state
 
 ## Example Usage
 
@@ -47,6 +49,12 @@ resource "vapi_assistant" "example" {
     provider = "elevenlabs"
     voice_id = "21m00Tcm4TlvDq8ikWAM"
   }
+}
+
+resource "vapi_phone_number" "example" {
+  number       = "+1234567890"
+  name         = "Customer Support Line"
+  assistant_id = vapi_assistant.example.id
 }
 ```
 

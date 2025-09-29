@@ -70,6 +70,25 @@ type AssistantVoice struct {
 	UseSpeakerBoost *bool    `json:"useSpeakerBoost,omitempty"`
 }
 
+// PhoneNumber represents a Vapi phone number
+type PhoneNumber struct {
+	ID                string `json:"id,omitempty"`
+	Number            string `json:"number,omitempty"`
+	Name              string `json:"name,omitempty"`
+	AssistantID       string `json:"assistantId,omitempty"`
+	SquadID           string `json:"squadId,omitempty"`
+	ServerURL         string `json:"serverUrl,omitempty"`
+	ServerURLSecret   string `json:"serverUrlSecret,omitempty"`
+	Provider          string `json:"provider,omitempty"`
+	TwilioAccountSid  string `json:"twilioAccountSid,omitempty"`
+	TwilioAuthToken   string `json:"twilioAuthToken,omitempty"`
+	VonageAPIKey      string `json:"vonageApiKey,omitempty"`
+	VonageAPISecret   string `json:"vonageApiSecret,omitempty"`
+	VonageApplicationID string `json:"vonageApplicationId,omitempty"`
+	CreatedAt         string `json:"createdAt,omitempty"`
+	UpdatedAt         string `json:"updatedAt,omitempty"`
+}
+
 // CreateAssistant creates a new assistant
 func (c *VapiClient) CreateAssistant(assistant *Assistant) (*Assistant, error) {
 	url := fmt.Sprintf("%s/assistant", c.BaseURL)
@@ -253,4 +272,189 @@ func (c *VapiClient) ListAssistants() ([]Assistant, error) {
 	}
 
 	return assistants, nil
+}
+
+// CreatePhoneNumber creates a new phone number
+func (c *VapiClient) CreatePhoneNumber(phoneNumber *PhoneNumber) (*PhoneNumber, error) {
+	url := fmt.Sprintf("%s/phone-number", c.BaseURL)
+
+	jsonData, err := json.Marshal(phoneNumber)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling phone number: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusCreated {
+		return nil, fmt.Errorf("API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	var createdPhoneNumber PhoneNumber
+	if err := json.Unmarshal(body, &createdPhoneNumber); err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %w", err)
+	}
+
+	return &createdPhoneNumber, nil
+}
+
+// GetPhoneNumber retrieves a phone number by ID
+func (c *VapiClient) GetPhoneNumber(id string) (*PhoneNumber, error) {
+	url := fmt.Sprintf("%s/phone-number/%s", c.BaseURL, id)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, fmt.Errorf("phone number not found")
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	var phoneNumber PhoneNumber
+	if err := json.Unmarshal(body, &phoneNumber); err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %w", err)
+	}
+
+	return &phoneNumber, nil
+}
+
+// UpdatePhoneNumber updates an existing phone number
+func (c *VapiClient) UpdatePhoneNumber(id string, phoneNumber *PhoneNumber) (*PhoneNumber, error) {
+	url := fmt.Sprintf("%s/phone-number/%s", c.BaseURL, id)
+
+	jsonData, err := json.Marshal(phoneNumber)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling phone number: %w", err)
+	}
+
+	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, fmt.Errorf("phone number not found")
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	var updatedPhoneNumber PhoneNumber
+	if err := json.Unmarshal(body, &updatedPhoneNumber); err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %w", err)
+	}
+
+	return &updatedPhoneNumber, nil
+}
+
+// DeletePhoneNumber deletes a phone number by ID
+func (c *VapiClient) DeletePhoneNumber(id string) error {
+	url := fmt.Sprintf("%s/phone-number/%s", c.BaseURL, id)
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return fmt.Errorf("error creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return fmt.Errorf("phone number not found")
+	}
+
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	return nil
+}
+
+// ListPhoneNumbers retrieves all phone numbers
+func (c *VapiClient) ListPhoneNumbers() ([]PhoneNumber, error) {
+	url := fmt.Sprintf("%s/phone-number", c.BaseURL)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+c.Token)
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("API error: %d - %s", resp.StatusCode, string(body))
+	}
+
+	var phoneNumbers []PhoneNumber
+	if err := json.Unmarshal(body, &phoneNumbers); err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %w", err)
+	}
+
+	return phoneNumbers, nil
 }
