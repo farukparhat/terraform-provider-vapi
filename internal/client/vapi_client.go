@@ -29,51 +29,51 @@ func NewVapiClient(baseURL, token string) *VapiClient {
 
 // Assistant represents a Vapi assistant
 type Assistant struct {
-	ID                     string                 `json:"id,omitempty"`
-	Name                   string                 `json:"name"`
-	FirstMessage           string                 `json:"firstMessage,omitempty"`
-	SystemMessage          string                 `json:"systemMessage,omitempty"`
-	Model                  *AssistantModel        `json:"model,omitempty"`
-	Voice                  *AssistantVoice        `json:"voice,omitempty"`
-	ClientMessages         []string               `json:"clientMessages,omitempty"`
-	ServerMessages         []string               `json:"serverMessages,omitempty"`
-	SilenceTimeoutSeconds  *int                   `json:"silenceTimeoutSeconds,omitempty"`
-	MaxDurationSeconds     *int                   `json:"maxDurationSeconds,omitempty"`
-	BackgroundSound        string                 `json:"backgroundSound,omitempty"`
-	BackgroundDenoisingEnabled *bool             `json:"backgroundDenoisingEnabled,omitempty"`
-	ModelOutputInMessagesEnabled *bool           `json:"modelOutputInMessagesEnabled,omitempty"`
-	TransportConfigurations []map[string]interface{} `json:"transportConfigurations,omitempty"`
-	CreatedAt              string                 `json:"createdAt,omitempty"`
-	UpdatedAt              string                 `json:"updatedAt,omitempty"`
+	ID                           string                   `json:"id,omitempty"`
+	Name                         string                   `json:"name"`
+	FirstMessage                 string                   `json:"firstMessage,omitempty"`
+	SystemMessage                string                   `json:"systemMessage,omitempty"`
+	Model                        *AssistantModel          `json:"model,omitempty"`
+	Voice                        *AssistantVoice          `json:"voice,omitempty"`
+	ClientMessages               []string                 `json:"clientMessages,omitempty"`
+	ServerMessages               []string                 `json:"serverMessages,omitempty"`
+	SilenceTimeoutSeconds        *int                     `json:"silenceTimeoutSeconds,omitempty"`
+	MaxDurationSeconds           *int                     `json:"maxDurationSeconds,omitempty"`
+	BackgroundSound              string                   `json:"backgroundSound,omitempty"`
+	BackgroundDenoisingEnabled   *bool                    `json:"backgroundDenoisingEnabled,omitempty"`
+	ModelOutputInMessagesEnabled *bool                    `json:"modelOutputInMessagesEnabled,omitempty"`
+	TransportConfigurations      []map[string]interface{} `json:"transportConfigurations,omitempty"`
+	CreatedAt                    string                   `json:"createdAt,omitempty"`
+	UpdatedAt                    string                   `json:"updatedAt,omitempty"`
 }
 
 // AssistantModel represents the model configuration for an assistant
 type AssistantModel struct {
-	Provider             string                 `json:"provider"`
-	Model                string                 `json:"model"`
-	Temperature          *float64               `json:"temperature,omitempty"`
-	MaxTokens            *int                   `json:"maxTokens,omitempty"`
-	EmotionRecognitionEnabled *bool            `json:"emotionRecognitionEnabled,omitempty"`
-	NumFastTurns         *int                   `json:"numFastTurns,omitempty"`
-	ToolIds              []string               `json:"toolIds,omitempty"`
-	FunctionIds          []string               `json:"functionIds,omitempty"`
+	Provider                  string   `json:"provider"`
+	Model                     string   `json:"model"`
+	Temperature               *float64 `json:"temperature,omitempty"`
+	MaxTokens                 *int     `json:"maxTokens,omitempty"`
+	EmotionRecognitionEnabled *bool    `json:"emotionRecognitionEnabled,omitempty"`
+	NumFastTurns              *int     `json:"numFastTurns,omitempty"`
+	ToolIds                   []string `json:"toolIds,omitempty"`
+	FunctionIds               []string `json:"functionIds,omitempty"`
 }
 
 // AssistantVoice represents the voice configuration for an assistant
 type AssistantVoice struct {
-	Provider    string   `json:"provider"`
-	VoiceID     string   `json:"voiceId"`
-	Speed       *float64 `json:"speed,omitempty"`
-	Stability   *float64 `json:"stability,omitempty"`
+	Provider        string   `json:"provider"`
+	VoiceID         string   `json:"voiceId"`
+	Speed           *float64 `json:"speed,omitempty"`
+	Stability       *float64 `json:"stability,omitempty"`
 	SimilarityBoost *float64 `json:"similarityBoost,omitempty"`
-	Style       *float64 `json:"style,omitempty"`
-	UseSpeakerBoost *bool `json:"useSpeakerBoost,omitempty"`
+	Style           *float64 `json:"style,omitempty"`
+	UseSpeakerBoost *bool    `json:"useSpeakerBoost,omitempty"`
 }
 
 // CreateAssistant creates a new assistant
 func (c *VapiClient) CreateAssistant(assistant *Assistant) (*Assistant, error) {
 	url := fmt.Sprintf("%s/assistant", c.BaseURL)
-	
+
 	jsonData, err := json.Marshal(assistant)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling assistant: %w", err)

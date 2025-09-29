@@ -29,33 +29,33 @@ type AssistantResource struct {
 
 // AssistantResourceModel describes the resource data model.
 type AssistantResourceModel struct {
-	ID                          types.String `tfsdk:"id"`
-	Name                        types.String `tfsdk:"name"`
-	FirstMessage                types.String `tfsdk:"first_message"`
-	SystemMessage               types.String `tfsdk:"system_message"`
-	Model                       types.Object `tfsdk:"model"`
-	Voice                       types.Object `tfsdk:"voice"`
-	ClientMessages              types.List   `tfsdk:"client_messages"`
-	ServerMessages              types.List   `tfsdk:"server_messages"`
-	SilenceTimeoutSeconds       types.Int64  `tfsdk:"silence_timeout_seconds"`
-	MaxDurationSeconds          types.Int64  `tfsdk:"max_duration_seconds"`
-	BackgroundSound             types.String `tfsdk:"background_sound"`
-	BackgroundDenoisingEnabled  types.Bool   `tfsdk:"background_denoising_enabled"`
-	ModelOutputInMessagesEnabled types.Bool  `tfsdk:"model_output_in_messages_enabled"`
-	CreatedAt                   types.String `tfsdk:"created_at"`
-	UpdatedAt                   types.String `tfsdk:"updated_at"`
+	ID                           types.String `tfsdk:"id"`
+	Name                         types.String `tfsdk:"name"`
+	FirstMessage                 types.String `tfsdk:"first_message"`
+	SystemMessage                types.String `tfsdk:"system_message"`
+	Model                        types.Object `tfsdk:"model"`
+	Voice                        types.Object `tfsdk:"voice"`
+	ClientMessages               types.List   `tfsdk:"client_messages"`
+	ServerMessages               types.List   `tfsdk:"server_messages"`
+	SilenceTimeoutSeconds        types.Int64  `tfsdk:"silence_timeout_seconds"`
+	MaxDurationSeconds           types.Int64  `tfsdk:"max_duration_seconds"`
+	BackgroundSound              types.String `tfsdk:"background_sound"`
+	BackgroundDenoisingEnabled   types.Bool   `tfsdk:"background_denoising_enabled"`
+	ModelOutputInMessagesEnabled types.Bool   `tfsdk:"model_output_in_messages_enabled"`
+	CreatedAt                    types.String `tfsdk:"created_at"`
+	UpdatedAt                    types.String `tfsdk:"updated_at"`
 }
 
 // AssistantModelModel describes the model configuration
 type AssistantModelModel struct {
-	Provider                  types.String `tfsdk:"provider"`
-	Model                     types.String `tfsdk:"model"`
+	Provider                  types.String  `tfsdk:"provider"`
+	Model                     types.String  `tfsdk:"model"`
 	Temperature               types.Float64 `tfsdk:"temperature"`
-	MaxTokens                 types.Int64  `tfsdk:"max_tokens"`
-	EmotionRecognitionEnabled types.Bool   `tfsdk:"emotion_recognition_enabled"`
-	NumFastTurns              types.Int64  `tfsdk:"num_fast_turns"`
-	ToolIds                   types.List   `tfsdk:"tool_ids"`
-	FunctionIds               types.List   `tfsdk:"function_ids"`
+	MaxTokens                 types.Int64   `tfsdk:"max_tokens"`
+	EmotionRecognitionEnabled types.Bool    `tfsdk:"emotion_recognition_enabled"`
+	NumFastTurns              types.Int64   `tfsdk:"num_fast_turns"`
+	ToolIds                   types.List    `tfsdk:"tool_ids"`
+	FunctionIds               types.List    `tfsdk:"function_ids"`
 }
 
 // AssistantVoiceModel describes the voice configuration
