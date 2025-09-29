@@ -51,6 +51,23 @@ terraform {
 
    Note: Adjust the path based on your OS and architecture.
 
+## Quick Start
+
+1. **Set up your environment:**
+
+   ```bash
+   ./setup-env.sh
+   # Edit .env file with your VAPI API key
+   source .env
+   ```
+
+2. **Run the basic example:**
+   ```bash
+   cd examples/basic-assistant
+   export TF_CLI_CONFIG_FILE=.terraformrc  # For local development
+   terraform plan
+   ```
+
 ## Configuration
 
 ### Provider Configuration
@@ -64,7 +81,20 @@ provider "vapi" {
 
 ### Environment Variables
 
-You can configure the provider using environment variables:
+You can configure the provider using environment variables. We provide a convenient setup:
+
+#### Option 1: Using .env file (Recommended)
+
+```bash
+# Run the setup script
+./setup-env.sh
+
+# Edit the created .env file with your API key
+# Then load it:
+source .env
+```
+
+#### Option 2: Manual export
 
 ```bash
 export VAPI_API_KEY="your-api-token"

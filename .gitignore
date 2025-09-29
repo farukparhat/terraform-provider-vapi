@@ -50,6 +50,9 @@ Thumbs.db
 # Local .terraformrc file
 .terraformrc
 
+# Environment variables (contains secrets)
+.env
+
 # Test artifacts
 testing/
 
