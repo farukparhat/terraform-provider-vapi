@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"terraform-provider-vapi/internal/client"
+
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -11,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"terraform-provider-vapi/internal/client"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -253,8 +254,15 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 		assistant.FirstMessage = data.FirstMessage.ValueString()
 	}
 
+	// Handle system message - it needs to be in the model object
 	if !data.SystemMessage.IsNull() {
-		assistant.SystemMessage = data.SystemMessage.ValueString()
+		if assistant.Model == nil {
+			assistant.Model = &client.AssistantModel{
+				Provider: "openai",      // Default provider
+				Model:    "gpt-4o-mini", // Default model
+			}
+		}
+		assistant.Model.SystemPrompt = data.SystemMessage.ValueString()
 	}
 
 	if !data.Model.IsNull() {
@@ -264,10 +272,13 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 			return
 		}
 
-		assistant.Model = &client.AssistantModel{
-			Provider: modelData.Provider.ValueString(),
-			Model:    modelData.Model.ValueString(),
+		// Preserve any existing model if system message was set
+		if assistant.Model == nil {
+			assistant.Model = &client.AssistantModel{}
 		}
+		
+		assistant.Model.Provider = modelData.Provider.ValueString()
+		assistant.Model.Model = modelData.Model.ValueString()
 
 		if !modelData.Temperature.IsNull() {
 			temp := modelData.Temperature.ValueFloat64()
@@ -424,7 +435,11 @@ func (r *AssistantResource) Read(ctx context.Context, req resource.ReadRequest, 
 	// Update the model with the assistant data
 	data.Name = types.StringValue(assistant.Name)
 	data.FirstMessage = types.StringValue(assistant.FirstMessage)
-	data.SystemMessage = types.StringValue(assistant.SystemMessage)
+	if assistant.Model != nil {
+		data.SystemMessage = types.StringValue(assistant.Model.SystemPrompt)
+	} else {
+		data.SystemMessage = types.StringValue("")
+	}
 	data.CreatedAt = types.StringValue(assistant.CreatedAt)
 	data.UpdatedAt = types.StringValue(assistant.UpdatedAt)
 
@@ -451,8 +466,15 @@ func (r *AssistantResource) Update(ctx context.Context, req resource.UpdateReque
 		assistant.FirstMessage = data.FirstMessage.ValueString()
 	}
 
+	// Handle system message - it needs to be in the model object
 	if !data.SystemMessage.IsNull() {
-		assistant.SystemMessage = data.SystemMessage.ValueString()
+		if assistant.Model == nil {
+			assistant.Model = &client.AssistantModel{
+				Provider: "openai",      // Default provider
+				Model:    "gpt-4o-mini", // Default model
+			}
+		}
+		assistant.Model.SystemPrompt = data.SystemMessage.ValueString()
 	}
 
 	// Update the assistant

@@ -32,7 +32,6 @@ type Assistant struct {
 	ID                           string                   `json:"id,omitempty"`
 	Name                         string                   `json:"name"`
 	FirstMessage                 string                   `json:"firstMessage,omitempty"`
-	SystemMessage                string                   `json:"systemMessage,omitempty"`
 	Model                        *AssistantModel          `json:"model,omitempty"`
 	Voice                        *AssistantVoice          `json:"voice,omitempty"`
 	ClientMessages               []string                 `json:"clientMessages,omitempty"`
@@ -51,6 +50,7 @@ type Assistant struct {
 type AssistantModel struct {
 	Provider                  string   `json:"provider"`
 	Model                     string   `json:"model"`
+	SystemPrompt              string   `json:"systemPrompt,omitempty"`
 	Temperature               *float64 `json:"temperature,omitempty"`
 	MaxTokens                 *int     `json:"maxTokens,omitempty"`
 	EmotionRecognitionEnabled *bool    `json:"emotionRecognitionEnabled,omitempty"`
