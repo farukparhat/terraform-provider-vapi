@@ -58,7 +58,7 @@ terraform {
 ```hcl
 provider "vapi" {
   url   = "https://api.vapi.ai"  # Optional, defaults to this value
-  token = "your-api-token"       # Optional, can be set via VAPI_TOKEN env var
+  token = "your-api-token"       # Optional, can be set via VAPI_API_KEY env var
 }
 ```
 
@@ -67,7 +67,7 @@ provider "vapi" {
 You can configure the provider using environment variables:
 
 ```bash
-export VAPI_TOKEN="your-api-token"
+export VAPI_API_KEY="your-api-token"
 export VAPI_URL="https://api.vapi.ai"  # Optional
 ```
 
@@ -76,7 +76,7 @@ export VAPI_URL="https://api.vapi.ai"  # Optional
 1. Log in to your [Vapi.ai dashboard](https://dashboard.vapi.ai)
 2. Navigate to the API section
 3. Generate or copy your API token
-4. Use it in your provider configuration or set the `VAPI_TOKEN` environment variable
+4. Use it in your provider configuration or set the `VAPI_API_KEY` environment variable
 
 ## Usage
 

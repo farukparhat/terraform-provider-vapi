@@ -71,13 +71,13 @@ func (p *VapiProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	token := data.Token.ValueString()
 	if token == "" {
-		token = os.Getenv("VAPI_TOKEN")
+		token = os.Getenv("VAPI_API_KEY")
 	}
 
 	if token == "" {
 		resp.Diagnostics.AddError(
 			"Unable to find token",
-			"Token cannot be an empty string. Please set the token in the provider configuration or set the VAPI_TOKEN environment variable.",
+			"Token cannot be an empty string. Please set the token in the provider configuration or set the VAPI_API_KEY environment variable.",
 		)
 		return
 	}

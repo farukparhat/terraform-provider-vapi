@@ -9,7 +9,7 @@ terraform {
 provider "vapi" {
   # Configuration options:
   # url   = "https://api.vapi.ai"  # Optional, defaults to https://api.vapi.ai
-  # token = "your-api-token"       # Optional, can be set via VAPI_TOKEN environment variable
+  # token = "your-api-token"       # Optional, can be set via VAPI_API_KEY environment variable
 }
 
 # Basic assistant with minimal configuration

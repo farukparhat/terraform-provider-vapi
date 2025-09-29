@@ -8,7 +8,7 @@ terraform {
 
 provider "vapi" {
   # Configuration can be set via environment variables:
-  # export VAPI_TOKEN="your-api-token"
+  # export VAPI_API_KEY="your-api-token"
   # export VAPI_URL="https://api.vapi.ai"  # Optional
 }
 
