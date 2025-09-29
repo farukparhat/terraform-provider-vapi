@@ -26,8 +26,8 @@ type VapiProvider struct {
 
 // VapiProviderModel describes the provider data model.
 type VapiProviderModel struct {
-	URL   types.String `tfsdk:"url"`
-	Token types.String `tfsdk:"token"`
+	URL    types.String `tfsdk:"url"`
+	ApiKey types.String `tfsdk:"api_key"`
 }
 
 func (p *VapiProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -42,8 +42,8 @@ func (p *VapiProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				MarkdownDescription: "Vapi API base URL",
 				Optional:            true,
 			},
-			"token": schema.StringAttribute{
-				MarkdownDescription: "Vapi API token",
+			"api_key": schema.StringAttribute{
+				MarkdownDescription: "Vapi API key",
 				Optional:            true,
 				Sensitive:           true,
 			},
@@ -70,21 +70,21 @@ func (p *VapiProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		}
 	}
 
-	token := data.Token.ValueString()
-	if token == "" {
-		token = os.Getenv("VAPI_API_KEY")
+	apiKey := data.ApiKey.ValueString()
+	if apiKey == "" {
+		apiKey = os.Getenv("VAPI_API_KEY")
 	}
 
-	if token == "" {
+	if apiKey == "" {
 		resp.Diagnostics.AddError(
-			"Unable to find token",
-			"Token cannot be an empty string. Please set the token in the provider configuration or set the VAPI_API_KEY environment variable.",
+			"Unable to find API key",
+			"API key cannot be an empty string. Please set the api_key in the provider configuration or set the VAPI_API_KEY environment variable.",
 		)
 		return
 	}
 
 	// Example client configuration for data sources and resources
-	client := client.NewVapiClient(url, token)
+	client := client.NewVapiClient(url, apiKey)
 	resp.DataSourceData = client
 	resp.ResourceData = client
 }
