@@ -41,6 +41,7 @@ type Assistant struct {
 	BackgroundSound              string                   `json:"backgroundSound,omitempty"`
 	BackgroundDenoisingEnabled   *bool                    `json:"backgroundDenoisingEnabled,omitempty"`
 	ModelOutputInMessagesEnabled *bool                    `json:"modelOutputInMessagesEnabled,omitempty"`
+	ServerURL                    string                   `json:"serverUrl,omitempty"`
 	TransportConfigurations      []map[string]interface{} `json:"transportConfigurations,omitempty"`
 	CreatedAt                    string                   `json:"createdAt,omitempty"`
 	UpdatedAt                    string                   `json:"updatedAt,omitempty"`

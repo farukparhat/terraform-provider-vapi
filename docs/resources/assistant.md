@@ -41,7 +41,7 @@ resource "vapi_assistant" "advanced" {
   }
 
   voice = {
-    provider         = "elevenlabs"
+    provider         = "11labs"
     voice_id         = "21m00Tcm4TlvDq8ikWAM"
     speed           = 1.0
     stability       = 0.75
@@ -73,6 +73,26 @@ resource "vapi_assistant" "timed" {
 }
 ```
 
+### Assistant with Webhook Server URL
+
+```terraform
+resource "vapi_assistant" "webhook_assistant" {
+  name          = "Webhook Assistant"
+  first_message = "Hello! I'm configured with webhook support."
+  system_message = "You are a helpful assistant with webhook event reporting."
+
+  # Configure webhook URL for receiving events
+  server_url = "https://yourapp.com/vapi/webhook"
+
+  # Specify which events to send to the server
+  server_messages = [
+    "conversation-update",
+    "end-of-call-report",
+    "function-call"
+  ]
+}
+```
+
 ## Schema
 
 ### Required
@@ -89,6 +109,7 @@ resource "vapi_assistant" "timed" {
 - `model` (Object) Configuration for the AI model used by the assistant. See [model](#nested-schema-for-model) below.
 - `model_output_in_messages_enabled` (Boolean) Whether model output should be included in messages.
 - `server_messages` (List of String) List of server messages to receive during the conversation.
+- `server_url` (String) Server URL for webhook events. When set, the assistant will send configured events to this endpoint.
 - `silence_timeout_seconds` (Number) Timeout in seconds before ending the conversation due to silence.
 - `system_message` (String) System message that guides the assistant's behavior and personality.
 - `voice` (Object) Configuration for the voice used by the assistant. See [voice](#nested-schema-for-voice) below.
@@ -116,7 +137,7 @@ Optional:
 
 Optional:
 
-- `provider` (String) The voice provider (e.g., "elevenlabs", "playht").
+- `provider` (String) The voice provider (e.g., "11labs", "playht").
 - `similarity_boost` (Number) Similarity boost setting for the voice.
 - `speed` (Number) Speed of the voice.
 - `stability` (Number) Stability setting for the voice.

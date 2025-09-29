@@ -37,7 +37,7 @@ EOF
 
   # Voice configuration
   voice = {
-    provider_type     = "elevenlabs"
+    provider_type     = "11labs"
     voice_id          = "21m00Tcm4TlvDq8ikWAM" # Example voice ID
     speed             = 1.0
     stability         = 0.75

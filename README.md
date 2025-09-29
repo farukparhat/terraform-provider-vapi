@@ -210,6 +210,7 @@ See the [examples](./examples/) directory for more detailed examples:
 
 - [Basic Assistant](./examples/basic-assistant/) - Minimal configuration
 - [Advanced Assistant](./examples/advanced-assistant/) - Full configuration with all options
+- [Assistant with Server URL](./examples/assistant-with-server-url/) - Configuration with webhook support
 
 ## Development
 

@@ -43,6 +43,7 @@ type AssistantResourceModel struct {
 	BackgroundSound              types.String `tfsdk:"background_sound"`
 	BackgroundDenoisingEnabled   types.Bool   `tfsdk:"background_denoising_enabled"`
 	ModelOutputInMessagesEnabled types.Bool   `tfsdk:"model_output_in_messages_enabled"`
+	ServerURL                    types.String `tfsdk:"server_url"`
 	CreatedAt                    types.String `tfsdk:"created_at"`
 	UpdatedAt                    types.String `tfsdk:"updated_at"`
 }
@@ -201,6 +202,10 @@ func (r *AssistantResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"model_output_in_messages_enabled": schema.BoolAttribute{
 				MarkdownDescription: "Whether model output in messages is enabled",
+				Optional:            true,
+			},
+			"server_url": schema.StringAttribute{
+				MarkdownDescription: "Server URL for webhook events",
 				Optional:            true,
 			},
 			"created_at": schema.StringAttribute{
@@ -401,6 +406,10 @@ func (r *AssistantResource) Create(ctx context.Context, req resource.CreateReque
 		assistant.ModelOutputInMessagesEnabled = &modelOutputInMessages
 	}
 
+	if !data.ServerURL.IsNull() {
+		assistant.ServerURL = data.ServerURL.ValueString()
+	}
+
 	// Create the assistant
 	createdAssistant, err := r.client.CreateAssistant(assistant)
 	if err != nil {
@@ -445,6 +454,7 @@ func (r *AssistantResource) Read(ctx context.Context, req resource.ReadRequest, 
 	} else {
 		data.SystemMessage = types.StringValue("")
 	}
+	data.ServerURL = types.StringValue(assistant.ServerURL)
 	// For now, set timestamp fields to null since VAPI API may not return them consistently
 	// This prevents "unknown value" errors while keeping the fields available
 	data.CreatedAt = types.StringNull()
@@ -482,6 +492,10 @@ func (r *AssistantResource) Update(ctx context.Context, req resource.UpdateReque
 			}
 		}
 		assistant.Model.SystemPrompt = data.SystemMessage.ValueString()
+	}
+
+	if !data.ServerURL.IsNull() {
+		assistant.ServerURL = data.ServerURL.ValueString()
 	}
 
 	// Update the assistant

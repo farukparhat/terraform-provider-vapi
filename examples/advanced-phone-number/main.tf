@@ -53,7 +53,7 @@ resource "vapi_assistant" "advanced_phone_assistant" {
   }
 
   voice = {
-    provider_type    = "elevenlabs"
+    provider_type    = "11labs"
     voice_id         = "21m00Tcm4TlvDq8ikWAM"
     speed           = 1.0
     stability       = 0.75
