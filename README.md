@@ -314,3 +314,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [GitHub Issues](https://github.com/faruk/terraform-provider-vapi/issues) - Bug reports and feature requests
 - [Vapi.ai Documentation](https://docs.vapi.ai) - Official Vapi API documentation
 - [Terraform Documentation](https://terraform.io/docs) - Terraform usage and best practices
+
+## Contact
+
+faruk.parhat@outlook.com
