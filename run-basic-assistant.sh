@@ -40,7 +40,7 @@ if [ $? -eq 0 ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "🎯 Creating assistant..."
         terraform apply -auto-approve
-        
+
         if [ $? -eq 0 ]; then
             echo ""
             echo "🎉 Success! Your basic assistant has been created!"
