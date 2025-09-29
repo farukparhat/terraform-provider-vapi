@@ -233,6 +233,69 @@ make testacc
 
 **Warning**: Acceptance tests create real resources and may incur costs.
 
+## Publishing to Terraform Registry
+
+This provider is designed to be published to the [Terraform Registry](https://registry.terraform.io/). The repository includes all necessary configuration for automated publishing.
+
+### Prerequisites for Publishing
+
+1. **Repository Structure**: The repository follows the required naming pattern `terraform-provider-{NAME}` and is public on GitHub.
+
+2. **Documentation**: Provider documentation is available in the `docs/` directory:
+
+   - `docs/index.md` - Provider overview and configuration
+   - `docs/resources/assistant.md` - Resource documentation
+
+3. **Manifest File**: `terraform-registry-manifest.json` specifies metadata including protocol version 6.0 for Terraform Plugin Framework.
+
+4. **Release Automation**:
+   - `.goreleaser.yml` - GoReleaser configuration for building and releasing
+   - `.github/workflows/release.yml` - GitHub Actions workflow for automated releases
+
+### Publishing Process
+
+1. **Set up GPG signing key** (required for Terraform Registry):
+
+   ```bash
+   # Generate a GPG key if you don't have one
+   gpg --full-generate-key
+
+   # Export your public key
+   gpg --armor --export "your-email@example.com" > public-key.asc
+   ```
+
+2. **Add GitHub Secrets** in your repository settings:
+
+   - `GPG_PRIVATE_KEY` - Your ASCII-armored GPG private key
+   - `PASSPHRASE` - Your GPG key passphrase
+
+3. **Create a release**:
+
+   ```bash
+   # Tag your release with semantic versioning
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+4. **Publish to Registry**:
+   - Sign in to [Terraform Registry](https://registry.terraform.io/) with your GitHub account
+   - Click "Publish" → "Provider"
+   - Select your repository
+   - The registry will automatically detect new releases via webhooks
+
+### Release Workflow
+
+The automated release process:
+
+1. Push a version tag (e.g., `v1.0.0`)
+2. GitHub Actions triggers the release workflow
+3. GoReleaser builds binaries for multiple platforms
+4. Creates checksums and GPG signatures
+5. Publishes release to GitHub
+6. Terraform Registry ingests the new version automatically
+
+For more details, see the [HashiCorp Provider Publishing Guide](https://developer.hashicorp.com/terraform/registry/providers/publishing).
+
 ## Contributing
 
 1. Fork the repository
